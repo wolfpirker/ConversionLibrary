@@ -11,10 +11,15 @@ namespace ConversionLibrary.Converter
     public class TemperatureConverter : BaseConverter
     {
         private const CategoryEnum ConverterCategory = CategoryEnum.Temperature;
+        private readonly IEnumerable<string> _supportedUnits = new List<string>() {"celsius", "fahrenheit"};
+        public TemperatureConverter()
+        {            
+        }
         public TemperatureConverter(string inputValue, string targetUnit) : base(inputValue, targetUnit)
         {
-
         }
+
+        public override IEnumerable<string> SupportedUnits => _supportedUnits;
 
         public override string GetResult(){
             double result = 0d;

@@ -26,7 +26,7 @@ namespace ConversionLibrary.Converter.Base
         protected IReadOnlyDictionary<CategoryEnum, List<string>> unitMatches = 
             new Dictionary<CategoryEnum, List<string>>{
                 {CategoryEnum.Temperature, new List<string>{"celsius", "fahrenheit"}},
-                {CategoryEnum.Length, new List<string>{"meter", "metre", "inch", "foot"}},
+                {CategoryEnum.Length, new List<string>{"meter", "metre", "inch", "foot", "feet", "mile"}},
                 {CategoryEnum.Data, new List<string>{"bit", "byte"}}
         };
     }

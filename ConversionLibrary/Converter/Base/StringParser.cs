@@ -15,9 +15,9 @@ namespace ConversionLibrary.Converter.Base
 
         public StringParser(string input, string targetUnit, CategoryEnum category) 
         {
+            this._input = input;     
             this._targetUnit = targetUnit;
-            this._category = category;
-            this._input = input;            
+            this._category = category;       
         }  
 
         // method to parse string as FromUnit and ToUnit object;
@@ -37,11 +37,10 @@ namespace ConversionLibrary.Converter.Base
                 value = double.Parse(trimmedInput.Split(" ")[0], CultureInfo.InvariantCulture);
             }
             else{
-                throw new InvalidInputFormatException("inner space between value and units is missing!");
+                throw new InvalidInputFormatException("inner space between value and unit is missing!");
             }
             
             try{
-                // Note: expect that a space always preceeds the SI-Prefix
                 siMatch =siPrefixBases.Keys.SingleOrDefault(prefix => trimmedInput.Contains($" {prefix}"));
                 if (siMatch != null){                    
                     base10From = siPrefixBases[siMatch];

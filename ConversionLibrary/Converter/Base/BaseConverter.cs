@@ -10,14 +10,29 @@ namespace ConversionLibrary.Converter.Base
 
     public abstract class BaseConverter
     {
-        private readonly string _inputValue;
-        private readonly string _targetUnit;      
+        private string _inputValue;
+        private string _targetUnit;  
+
+        protected BaseConverter() 
+        {
+        }    
 
         protected BaseConverter(string inputValue, string targetUnit) 
         {
             this._inputValue = inputValue;
             this._targetUnit = targetUnit;
         }
+
+        public abstract IEnumerable<string> SupportedUnits
+        {
+            get;
+        }
+
+        public void GetNewInput(string inputValue, string targetUnit){
+            this._inputValue = inputValue;
+            this._targetUnit = targetUnit;
+        }
+
 
         public abstract string GetResult();
 

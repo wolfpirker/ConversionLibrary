@@ -10,15 +10,23 @@ namespace ConversionLibrary.Converter
     {
         private const CategoryEnum ConverterCategory = CategoryEnum.Data;
 
-        private IReadOnlyDictionary<string, double> unitFactors = new Dictionary<string, double>{            
+        private static IReadOnlyDictionary<string, double> unitFactors = new Dictionary<string, double>{            
             {"bit", 8d},
             {"byte", 1d}
         };
+
+        private readonly IEnumerable<string> _supportedUnits = unitFactors.Keys;
+
+        public DataConverter()
+        {            
+        }
 
         public DataConverter(string inputValue, string targetUnit) : base(inputValue, targetUnit)
         {
 
         }
+
+        public override IEnumerable<string> SupportedUnits => _supportedUnits;
 
         public override string GetResult(){
             double result = 0d;
