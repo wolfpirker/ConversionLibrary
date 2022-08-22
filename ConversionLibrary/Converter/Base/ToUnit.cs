@@ -13,6 +13,8 @@ namespace ConversionLibrary.Converter.Base
             this._siPrefix = siPrefix;
         }
 
+        
+
         public string UnitName => _unitName;
         public string SiPrefix => _siPrefix;
         public Int16 Base10 => _base10;

@@ -1,26 +1,16 @@
 namespace ConversionLibrary.Converter.Base
 {
-    public class FromUnit
+    public class FromUnit : ToUnit
     {
-        private readonly double _value;
-        private readonly string _unitName;
-        private readonly Int16 _base10;
-        private readonly string _siPrefix;
-        
+        private double _value;
 
-        public FromUnit(string unitName, Int16 base10,  string siPrefix, double value)
+        public FromUnit(ToUnit to) : base(to.UnitName, to.Base10, to.SiPrefix)
         {
-            this.SiPrefix = siPrefix;
-            this._unitName = unitName;
-            this._base10 = base10;
-            this._siPrefix = siPrefix;
-            this._value = value;            
         }
-        
-        public Int16 Base10 => _base10;
-        public string UnitName => _unitName;
-        public string SiPrefix { get; }
-        public double Value => _value;
-        
+        public FromUnit(string unitName, Int16 base10, string siPrefix) : base(unitName, base10, siPrefix)
+        {
+        }
+
+        public double Value { get => _value; set => _value = value; }
     }
 }

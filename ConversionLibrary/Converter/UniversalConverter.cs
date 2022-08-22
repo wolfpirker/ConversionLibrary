@@ -20,15 +20,15 @@ namespace ConversionLibrary.Converter
         private IEnumerable<string> _supportedUnits;
         public UniversalConverter() 
         {
-            lengthConverter = new LengthConverter();
-            dataConverter = new DataConverter();
-            temperatureConverter = new TemperatureConverter();
-            _supportedUnits = lengthConverter.SupportedUnits.Concat(
-                dataConverter.SupportedUnits).Concat(temperatureConverter.SupportedUnits);
+            InitializeConvertersAndUnits();
         }
 
         public UniversalConverter(string inputValue, string targetUnit) : base(inputValue, targetUnit)
         {
+            InitializeConvertersAndUnits();
+        }
+
+        private void InitializeConvertersAndUnits(){
             lengthConverter = new LengthConverter();
             dataConverter = new DataConverter();
             temperatureConverter = new TemperatureConverter();
@@ -39,8 +39,6 @@ namespace ConversionLibrary.Converter
         public override IEnumerable<string> SupportedUnits => _supportedUnits;
 
         public override string GetResult(){
-
-
             ConverterCategory = getConverterCategoryMatch();
 
             if (ConverterCategory == CategoryEnum.Length){

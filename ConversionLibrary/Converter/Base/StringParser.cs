@@ -20,28 +20,11 @@ namespace ConversionLibrary.Converter.Base
             this._category = category;       
         }  
 
-        // method to check whether given unit+si-prefix are supported
-        // e.g. Kibibyte, Kelvin should throw ConversionNotSupportedException
-        private static bool CheckUnitsCompatible(string inputUnit, string targetUnit, FromUnit from, ToUnit to){
-            if (inputUnit.Length > from.UnitName.Length + from.SiPrefix.Length){
-                throw new ConversionNotSupportedException();
-            }
-            if (targetUnit.Length > to.UnitName.Length + to.SiPrefix.Length){
-                throw new ConversionNotSupportedException();
-            }
-            return true;
-        }
-
-
         // method to parse string as FromUnit and ToUnit object;
         // returns StringParserResult with extracted information 
         public StringParserResult GetParserResults(){
-            string? siMatch;
-            string? unitFrom = null, unitTo = null;
             FromUnit from;
-            ToUnit to;
-            string siPrefixTo = "", siPrefixFrom="";
-            Int16 base10From = 0, base10To = 0;
+            ToUnit to, tmp;
             double value;
             
             string inputUnit;
@@ -54,50 +37,61 @@ namespace ConversionLibrary.Converter.Base
             else{
                 throw new InvalidInputFormatException("inner space between value and unit is missing!");
             }
-            
-            try{
-                siMatch =siPrefixBases.Keys.SingleOrDefault(prefix => trimmedInput.Contains($" {prefix}"));
-                if (siMatch != null){   
-                    siPrefixFrom = siMatch;                 
-                    base10From = siPrefixBases[siMatch];
-                }
 
-                siMatch = siPrefixBases.Keys.SingleOrDefault(prefix => trimmedTarget.Contains($"{prefix}"));
-                if (siMatch != null){             
-                    siPrefixTo = siMatch;
-                    base10To = siPrefixBases[siMatch];
-                }
-            }
-            catch(System.InvalidOperationException){                           
-                throw new InvalidInputFormatException("Several SI-Prefixes matching instead of at maximum one!");
-            }  
-            try{
-                unitFrom = unitMatches[_category].SingleOrDefault(unit => trimmedInput.EndsWith(unit));
-            }
-            catch(System.InvalidOperationException){
-                throw new InvalidInputFormatException("Several unit matches in input value instead of one!");
-            }  
-            try{                
-                unitTo = unitMatches[_category].SingleOrDefault(unit => trimmedTarget.EndsWith(unit));
-            }   
-            catch(System.InvalidOperationException){
-                throw new InvalidInputFormatException("Several unit matches in target unit instead of one!");
-            }     
-
-            if (!String.IsNullOrEmpty(unitFrom) && !String.IsNullOrEmpty(unitTo)){
-                from = new FromUnit(unitFrom, base10From, siPrefixFrom, value );  
-                to = new ToUnit(unitTo, base10To, siPrefixTo );
-            }  
-            else{
-                throw new InvalidInputFormatException();
-            } 
+            tmp = ParseUnitInfo(trimmedInput);
+            from = new FromUnit(tmp);
+            from.Value = value;
+            to   = ParseUnitInfo(trimmedTarget);
 
             if (CheckUnitsCompatible(inputUnit, trimmedTarget, from, to)){
                 return new StringParserResult(from, to);
             }
             else{
                 throw new ConversionNotSupportedException();
+            }            
+        }     
+
+        private ToUnit ParseUnitInfo(string trimmedInput) {
+            string? siMatch;
+            string siPrefix = "";
+            Int16 base10 = 0;
+            string? unit = null;
+
+            try{
+                siMatch = siPrefixBases.Keys.SingleOrDefault(prefix => trimmedInput.Contains($"{prefix}"));
+                if (siMatch != null){   
+                    siPrefix = siMatch;                 
+                    base10 = siPrefixBases[siMatch];
+                }
             }
-        }      
+            catch(System.InvalidOperationException){                           
+                throw new InvalidInputFormatException("Several SI-Prefixes matching instead of at maximum one!");
+            } 
+
+            try{
+                unit = unitMatches[_category].SingleOrDefault(unit => trimmedInput.EndsWith(unit));
+            }
+            catch(System.InvalidOperationException){
+                throw new InvalidInputFormatException("Several unit matches in input value instead of one!");
+            }  
+
+            if (String.IsNullOrEmpty(unit)) 
+                throw new ConversionNotSupportedException();
+
+            return new ToUnit(unit, base10, siPrefix);
+        }
+
+        // method to check whether given unit+si-prefix are supported
+        // e.g. Kibibyte, Kelvin should throw ConversionNotSupportedException
+        private static bool CheckUnitsCompatible(string inputUnit, string targetUnit, FromUnit from, ToUnit to){
+            if (inputUnit.Length > from.UnitName.Length + from.SiPrefix.Length){
+                throw new ConversionNotSupportedException();
+            }
+            if (targetUnit.Length > to.UnitName.Length + to.SiPrefix.Length){
+                throw new ConversionNotSupportedException();
+            }
+            return true;
+        }
+
     }
 }

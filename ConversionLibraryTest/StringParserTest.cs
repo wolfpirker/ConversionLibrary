@@ -32,7 +32,7 @@ public class StringParserTest
             // {"15505.5 decimeter", "15.52 Hectoinch", "15.214 Miles", "15250 decifoot"}
             "deci", "hecto", "", "deci",
             // "15505.5 kilobyte", "15525 megabyte", "15.214 terabyte", "32 bit"
-            "kilo", "mega", "tera",
+            "kilo", "mega", "tera", "",
             // "15.5 Celsius", "132.4 fahrenheit", "12.5 centicelsius"
             "", "", "centi"
         };
@@ -58,16 +58,16 @@ public class StringParserTest
         Dictionary<int, CategoryEnum> categoryDict = new Dictionary<int, CategoryEnum>{
             {0, CategoryEnum.Length },
             {4, CategoryEnum.Data },
-            {7, CategoryEnum.Temperature }
+            {8, CategoryEnum.Temperature }
         };
         int i = 0;
         foreach (string input in testInputs){
-            if (categoryDict.Keys.Contains(i)){
+            if (categoryDict.ContainsKey(i)){
                 cat = categoryDict[i];
             }
             var parser = new StringParser(input, testTargetUnits[i], cat);   
             System.Console.WriteLine($"{i}: {input}, {testTargetUnits[i]}");         
-            StringParserResult result = parser.GetParserResults();  
+            StringParserResult result = parser.GetParserResults();              
             Assert.AreEqual(result.FromUnit.SiPrefix, siPrefixInput[i], $"The result should have been {siPrefixInput[i]}, but was {result.FromUnit.SiPrefix}");
             Assert.AreEqual(result.ToUnit.SiPrefix, siPrefixTarget[i], $"The result should have been {siPrefixTarget[i]}, but was {result.ToUnit.SiPrefix}");
             Assert.AreEqual(result.FromUnit.UnitName, siUnitInput[i], $"The result should have been {siUnitInput[i]}, but was {result.FromUnit.UnitName}");
@@ -82,5 +82,12 @@ public class StringParserTest
         var parser = new StringParser("125 kibibyte", "byte", CategoryEnum.Data);            
          Assert.Throws<ConversionNotSupportedException>(() => parser.GetParserResults());  
         
+    }
+
+    [Test]
+    public void RaiseInvalidInputFormatException()
+    {
+        var parser = new StringParser("125 kilobyte millibit", "byte", CategoryEnum.Data);            
+         Assert.Throws<InvalidInputFormatException>(() => parser.GetParserResults());          
     }
 }
