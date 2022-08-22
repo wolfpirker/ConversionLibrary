@@ -20,9 +20,9 @@ namespace ConversionLibrary.Converter.Base
             this._category = category;       
         }  
 
-        // method to check whether given unit+si-prefix is fully supported
+        // method to check whether given unit+si-prefix are supported
         // e.g. Kibibyte, Kelvin should throw ConversionNotSupportedException
-        private static bool CheckUnitCompatible(string inputUnit, string targetUnit, FromUnit from, ToUnit to){
+        private static bool CheckUnitsCompatible(string inputUnit, string targetUnit, FromUnit from, ToUnit to){
             if (inputUnit.Length > from.UnitName.Length + from.SiPrefix.Length){
                 throw new ConversionNotSupportedException();
             }
@@ -92,7 +92,7 @@ namespace ConversionLibrary.Converter.Base
                 throw new InvalidInputFormatException();
             } 
 
-            if (CheckUnitCompatible(inputUnit, trimmedTarget, from, to)){
+            if (CheckUnitsCompatible(inputUnit, trimmedTarget, from, to)){
                 return new StringParserResult(from, to);
             }
             else{

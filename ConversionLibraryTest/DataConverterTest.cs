@@ -5,9 +5,9 @@ using NUnit.Framework;
 
 public class DataConverterTest
 {
-    private static readonly List<string> testInputs = new List<string>{"15505.5 kilobyte", "15525 megabyte", "15.214 terabyte"};
-    private static readonly List<string> testTargetUnits = new List<string>{"bit", "gigabyte", "megabyte"};
-    private static readonly List<string> expectedResults = new List<string>{"124,044,000.00 bit", "15.53 gigabyte", "15,214,000.00 megabyte"};
+    private static readonly List<string> testInputs = new List<string>{"15505.5 kilobyte", "15525 megabyte", "15.214 terabyte", "32 bit"};
+    private static readonly List<string> testTargetUnits = new List<string>{"bit", "gigabyte", "megabyte", "byte"};
+    private static readonly List<string> expectedResults = new List<string>{"124,044,000.00 bit", "15.53 gigabyte", "15,214,000.00 megabyte", "4.00 byte"};
 
     public static List<string> TestInputs => testInputs;
 
