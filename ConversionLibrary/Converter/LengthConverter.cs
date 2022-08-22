@@ -18,6 +18,7 @@ namespace ConversionLibrary.Converter
             {"meter", 1d},
             {"metre", 1d},
             {"mile", 1d/1609d},
+            {"miles", 1d/1609d}
         };
         private readonly IEnumerable<string> _supportedUnits = unitFactors.Keys;
         public LengthConverter() 

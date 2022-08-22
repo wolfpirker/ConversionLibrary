@@ -1,12 +1,12 @@
 ﻿using ConversionLibrary;
 using ConversionLibrary.Converter.Base;
 
-// See https://aka.ms/new-console-template for more information
+// See https://aka.ms/new-console-template for more information; about .NET6 changes
 
 string getResultOfConversion<T>(T converter) where T : BaseConverter
 {
     string? inputValue, unitTarget;
-    System.Console.WriteLine($"supported units: {converter.SupportedUnits} (in combination with SI-Prefixes)");
+    System.Console.WriteLine($"supported units: {string.Join(", ", converter.SupportedUnits)} (in combination with SI-Prefixes)");
     System.Console.WriteLine("Enter input value with unit, e.g.: 1.25 <unit>, etc.:");
     inputValue = Console.ReadLine();
     System.Console.WriteLine("Enter target unit:");
@@ -22,18 +22,24 @@ syntax rules:
   2) as target unit also write the full SI-prefix and full unitname.
 
 to start enter first a single number for the type of conversion:
+  0) universal converion - decides which converter to use itself
   1) length conversion
   2) data conversion
-  3) temperature conversion
+  3) temperature conversion  
   q) quit");
 
 while (true){
 
     string mode = Console.ReadLine();
+    var universalConverter = new ConversionLibrary.Converter.UniversalConverter();
     var lengthConverter = new ConversionLibrary.Converter.LengthConverter();
     var dataConverter = new ConversionLibrary.Converter.DataConverter();
     var temperatureConverter = new ConversionLibrary.Converter.TemperatureConverter();
     switch(mode){
+        case "0":
+            System.Console.WriteLine($"Type of Conversion: Universal conversion");
+            System.Console.WriteLine($"{getResultOfConversion(universalConverter)}");
+            break;
         case "1":
             System.Console.WriteLine($"Type of Conversion: Length conversion");
             System.Console.WriteLine($"{getResultOfConversion(lengthConverter)}");
@@ -50,5 +56,5 @@ while (true){
         default:
             return;
     }
-    System.Console.WriteLine("Enter number for type of conversion or q (1, 2 or 3):");
+    System.Console.WriteLine("Enter number for type of conversion (0, 1, 2 or 3) or q to quit:");
 }

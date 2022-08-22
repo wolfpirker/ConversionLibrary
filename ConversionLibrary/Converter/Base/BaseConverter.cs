@@ -27,6 +27,8 @@ namespace ConversionLibrary.Converter.Base
         {
             get;
         }
+        protected string InputValue => _inputValue;
+        protected string TargetUnit => _targetUnit;
 
         public void GetNewInput(string inputValue, string targetUnit){
             this._inputValue = inputValue;
@@ -39,7 +41,7 @@ namespace ConversionLibrary.Converter.Base
         // method to extract value and units from the string input parameters
         // using StringParser class
         protected StringParserResult Parse(CategoryEnum category){
-            var parser = new StringParser(_inputValue, _targetUnit, category);            
+            var parser = new StringParser(InputValue, TargetUnit, category);            
             StringParserResult result = parser.GetParserResults();            
             return result;
         }     
