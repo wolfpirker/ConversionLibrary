@@ -5,9 +5,9 @@ using NUnit.Framework;
 
 public class DataConverterTest
 {
-    private static readonly List<string> testInputs = new List<string>{"15505.5 kilobyte", "15525 megabyte", "15.214 terabyte", "32 bit"};
-    private static readonly List<string> testTargetUnits = new List<string>{"bit", "gigabyte", "megabyte", "byte"};
-    private static readonly List<string> expectedResults = new List<string>{"124,044,000.00 bit", "15.53 gigabyte", "15,214,000.00 megabyte", "4.00 byte"};
+    private static readonly List<string> testInputs = new() { "15505.5 kilobyte", "15525 megabyte", "15.214 terabyte", "32 bit"};
+    private static readonly List<string> testTargetUnits = new() { "bit", "gigabyte", "megabyte", "byte"};
+    private static readonly List<string> expectedResults = new() { "124,044,000.00 bit", "15.53 gigabyte", "15,214,000.00 megabyte", "4.00 byte"};
 
     public static List<string> TestInputs => testInputs;
 
@@ -23,7 +23,7 @@ public class DataConverterTest
 
             var converter = new DataConverter(input, testTargetUnits[i]);
             string result = converter.GetResult();
-            Assert.AreEqual(result, expectedResults[i], $"The result should have been {expectedResults[i]}, but was {result}");
+            Assert.That(expectedResults[i], Is.EqualTo(result), $"The result should have been {expectedResults[i]}, but was {result}");
             i++;
         } 
     }
@@ -37,7 +37,7 @@ public class DataConverterTest
 
             converter.SetNewInput(input, testTargetUnits[i]);
             string result = converter.GetResult();
-            Assert.AreEqual(result, expectedResults[i], $"The result should have been {expectedResults[i]}, but was {result}");
+            Assert.That(expectedResults[i], Is.EqualTo(result), $"The result should have been {expectedResults[i]}, but was {result}");
             i++;
         } 
     }

@@ -39,27 +39,27 @@ namespace ConversionLibrary.Converter
         public override IEnumerable<string> SupportedUnits => _supportedUnits;
 
         public override string GetResult(){
-            ConverterCategory = getConverterCategoryMatch();
+            ConverterCategory = GetConverterCategoryMatch();
 
             if (ConverterCategory == CategoryEnum.Length){
-                return useConverter(lengthConverter);
+                return UseConverter(lengthConverter);
             }
             else if (ConverterCategory == CategoryEnum.Data){
-                return useConverter(dataConverter);
+                return UseConverter(dataConverter);
             }
             else if (ConverterCategory == CategoryEnum.Temperature){
-                return useConverter(temperatureConverter);
+                return UseConverter(temperatureConverter);
             } 
             throw new ConversionNotSupportedException();
         }        
 
-        private string useConverter<T>(T converter) where T : BaseConverter{
+        private string UseConverter<T>(T converter) where T : BaseConverter{
             converter.SetNewInput(InputValue, TargetUnit);
             return converter.GetResult();
         }
 
         // find a match of the units with a converter category of supported units
-        private CategoryEnum getConverterCategoryMatch(){
+        private CategoryEnum GetConverterCategoryMatch(){
             string trimmedInput = InputValue.Trim().ToLower();
             if (lengthConverter.SupportedUnits.Any(unit => trimmedInput.EndsWith(unit))){
                 return CategoryEnum.Length;

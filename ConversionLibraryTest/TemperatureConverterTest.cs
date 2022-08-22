@@ -6,9 +6,9 @@ using NUnit.Framework;
 
 public class TemperatureConverterTest
 {
-    private static readonly List<string> testInputs = new List<string>{"15.5 Celsius", "132.4 fahrenheit", "12.5 centicelsius"};
-    private static readonly List<string> testTargetUnits = new List<string>{"Fahrenheit", "celsius", "millifahrenheit"};
-    private static readonly List<string> expectedResults = new List<string>{"59.90 fahrenheit", "55.78 celsius", "32,225.00 millifahrenheit"};
+    private static readonly List<string> testInputs = new() { "15.5 Celsius", "132.4 fahrenheit", "12.5 centicelsius"};
+    private static readonly List<string> testTargetUnits = new() { "Fahrenheit", "celsius", "millifahrenheit"};
+    private static readonly List<string> expectedResults = new() { "59.90 fahrenheit", "55.78 celsius", "32,225.00 millifahrenheit"};
 
     public static List<string> TestInputs => testInputs;
 
@@ -24,7 +24,7 @@ public class TemperatureConverterTest
 
             var converter = new TemperatureConverter(input, TestTargetUnits[i]);
             string result = converter.GetResult();
-            Assert.AreEqual(result, ExpectedResults[i], $"The result should have been {ExpectedResults[i]}, but was {result}");
+            Assert.That(ExpectedResults[i], Is.EqualTo(result), $"The result should have been {ExpectedResults[i]}, but was {result}");
             i++;
         } 
     }
@@ -38,7 +38,7 @@ public class TemperatureConverterTest
 
             converter.SetNewInput(input, TestTargetUnits[i]);
             string result = converter.GetResult();
-            Assert.AreEqual(result, ExpectedResults[i], $"The result should have been {ExpectedResults[i]}, but was {result}");
+            Assert.That(ExpectedResults[i], Is.EqualTo(result), $"The result should have been {ExpectedResults[i]}, but was {result}");
             i++;
         } 
     }

@@ -5,9 +5,9 @@ using NUnit.Framework;
 
 public class LengthConverterTest
 {
-    private static readonly List<string> testInputs = new List<string>{"15505.5 decimeter", "15.52 Hectoinch", "15.214 Miles", "15250 decifoot"};
-    private static readonly List<string> testTargetUnits = new List<string>{"kilometer", "miles", "centimeter", "Mile"};
-    private static readonly List<string> expectedResults = new List<string>{"1.55 kilometer", "0.02 miles", "2,447,932.60 centimeter", "0.29 mile"};
+    private static readonly List<string> testInputs = new() { "15505.5 decimeter", "15.52 Hectoinch", "15.214 Miles", "15250 decifoot"};
+    private static readonly List<string> testTargetUnits = new() { "kilometer", "miles", "centimeter", "Mile"};
+    private static readonly List<string> expectedResults = new() { "1.55 kilometer", "0.02 miles", "2,447,932.60 centimeter", "0.29 mile"};
 
     public static List<string> TestInputs => testInputs;
 
@@ -23,7 +23,7 @@ public class LengthConverterTest
 
             var converter = new LengthConverter(input, testTargetUnits[i]);
             string result = converter.GetResult();
-            Assert.AreEqual(result, expectedResults[i], $"The result should have been {expectedResults[i]}, but was {result}");
+            Assert.That(expectedResults[i], Is.EqualTo(result), $"The result should have been {expectedResults[i]}, but was {result}");
             i++;
         } 
     }
@@ -37,7 +37,7 @@ public class LengthConverterTest
 
             converter.SetNewInput(input, testTargetUnits[i]);
             string result = converter.GetResult();
-            Assert.AreEqual(result, expectedResults[i], $"The result should have been {expectedResults[i]}, but was {result}");
+            Assert.That(expectedResults[i], Is.EqualTo(result), $"The result should have been {expectedResults[i]}, but was {result}");
             i++;
         } 
     }

@@ -10,17 +10,6 @@ using ConversionLibrary.Converter.Exceptions;
 
 public class StringParserTest
 {
-    private static List<string> testInputs;
-    private static List<string> testTargetUnits;
-    private static List<string> expectedResults;
-
-
-    [SetUp]
-    public void TestInit()
-    {
-
-    }
-
     [Test]
     public void GetParserResults()
     {
@@ -28,7 +17,8 @@ public class StringParserTest
         
         List<string> testInputs = LengthConverterTest.TestInputs.Concat(DataConverterTest.TestInputs.Concat(TemperatureConverterTest.TestInputs)).ToList<string>();
         List<string> testTargetUnits = LengthConverterTest.TestTargetUnits.Concat(DataConverterTest.TestTargetUnits.Concat(TemperatureConverterTest.TestTargetUnits)).ToList<string>();
-        List<string> siPrefixInput = new List<string>{
+        List<string> siPrefixInput = new()
+        {
             // {"15505.5 decimeter", "15.52 Hectoinch", "15.214 Miles", "15250 decifoot"}
             "deci", "hecto", "", "deci",
             // "15505.5 kilobyte", "15525 megabyte", "15.214 terabyte", "32 bit"
@@ -36,7 +26,8 @@ public class StringParserTest
             // "15.5 Celsius", "132.4 fahrenheit", "12.5 centicelsius"
             "", "", "centi"
         };
-        List<string> siPrefixTarget = new List<string>{
+        List<string> siPrefixTarget = new()
+        {
             // {"kilometer", "miles", "centimeter", "Mile"}
             "kilo", "", "centi", "",
             // {"bit", "gigabyte", "megabyte", "byte"}
@@ -44,18 +35,21 @@ public class StringParserTest
             // "Fahrenheit", "celsius", "millifahrenheit"
             "", "", "milli"
         };
-        List<string> siUnitInput = new List<string>{
+        List<string> siUnitInput = new()
+        {
             "meter", "inch", "miles", "foot",
             "byte", "byte", "byte", "bit",
             "celsius", "fahrenheit", "celsius"
         };
-        List<string> siUnitTarget = new List<string>{
+        List<string> siUnitTarget = new()
+        {
             "meter", "miles", "meter", "mile",
             "bit", "byte", "byte", "byte",
             "fahrenheit", "celsius", "fahrenheit"
         };
 
-        Dictionary<int, CategoryEnum> categoryDict = new Dictionary<int, CategoryEnum>{
+        Dictionary<int, CategoryEnum> categoryDict = new()
+        {
             {0, CategoryEnum.Length },
             {4, CategoryEnum.Data },
             {8, CategoryEnum.Temperature }
@@ -67,11 +61,15 @@ public class StringParserTest
             }
             var parser = new StringParser(input, testTargetUnits[i], cat);   
             System.Console.WriteLine($"{i}: {input}, {testTargetUnits[i]}");         
-            StringParserResult result = parser.GetParserResults();              
-            Assert.AreEqual(result.FromUnit.SiPrefix, siPrefixInput[i], $"The result should have been {siPrefixInput[i]}, but was {result.FromUnit.SiPrefix}");
-            Assert.AreEqual(result.ToUnit.SiPrefix, siPrefixTarget[i], $"The result should have been {siPrefixTarget[i]}, but was {result.ToUnit.SiPrefix}");
-            Assert.AreEqual(result.FromUnit.UnitName, siUnitInput[i], $"The result should have been {siUnitInput[i]}, but was {result.FromUnit.UnitName}");
-            Assert.AreEqual(result.ToUnit.UnitName, siUnitTarget[i], $"The result should have been {siUnitTarget[i]}, but was {result.ToUnit.UnitName}");
+            StringParserResult result = parser.GetParserResults();   
+            Assert.Multiple(() =>
+            {
+                Assert.That(siPrefixInput[i], Is.EqualTo(result.FromUnit.SiPrefix), $"The result should have been {siPrefixInput[i]}, but was {result.FromUnit.SiPrefix}");
+                Assert.That(siPrefixTarget[i], Is.EqualTo(result.ToUnit.SiPrefix), $"The result should have been {siPrefixTarget[i]}, but was {result.ToUnit.SiPrefix}");
+                Assert.That(siUnitInput[i], Is.EqualTo(result.FromUnit.UnitName), $"The result should have been {siUnitInput[i]}, but was {result.FromUnit.UnitName}");
+                Assert.That(siUnitTarget[i], Is.EqualTo(result.ToUnit.UnitName), $"The result should have been {siUnitTarget[i]}, but was {result.ToUnit.UnitName}");
+            });
+            
             i++;
         }
     }

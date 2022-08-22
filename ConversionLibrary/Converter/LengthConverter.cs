@@ -11,7 +11,7 @@ namespace ConversionLibrary.Converter
         private const CategoryEnum ConverterCategory = CategoryEnum.Length;
 
         // factors in direction from input unit to output unit; reverse like divisor
-        private static IReadOnlyDictionary<string, double> unitFactors = new Dictionary<string, double>{            
+        private static readonly IReadOnlyDictionary<string, double> unitFactors = new Dictionary<string, double>{            
             {"inch", 1000d/25.4},
             {"foot", 1d/0.3048},
             {"feet", 1d/0.3048},
@@ -32,7 +32,7 @@ namespace ConversionLibrary.Converter
         public override IEnumerable<string> SupportedUnits => _supportedUnits;
 
         public override string GetResult(){
-            double result = 0d;
+            double result;
             StringParserResult pResult = this.Parse(ConverterCategory);
 
             result = pResult.FromUnit.Value;

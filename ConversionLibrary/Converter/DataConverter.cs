@@ -10,7 +10,7 @@ namespace ConversionLibrary.Converter
     {
         private const CategoryEnum ConverterCategory = CategoryEnum.Data;
 
-        private static IReadOnlyDictionary<string, double> unitFactors = new Dictionary<string, double>{            
+        private static readonly IReadOnlyDictionary<string, double> unitFactors = new Dictionary<string, double>{            
             {"bit", 8d},
             {"byte", 1d}
         };
@@ -29,7 +29,7 @@ namespace ConversionLibrary.Converter
         public override IEnumerable<string> SupportedUnits => _supportedUnits;
 
         public override string GetResult(){
-            double result = 0d;
+            double result;
             StringParserResult pResult = this.Parse(ConverterCategory);
 
             result = pResult.FromUnit.Value;

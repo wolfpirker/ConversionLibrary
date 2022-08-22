@@ -25,7 +25,7 @@ public class UniversalConverterTest
         foreach (string input in testInputs){
             var converter = new UniversalConverter(input, testTargetUnits[i]);
             string result = converter.GetResult();
-            Assert.AreEqual(result, expectedResults[i], $"The result should have been {expectedResults[i]}, but was {result}");
+            Assert.That(expectedResults[i], Is.EqualTo(result), $"The result should have been {expectedResults[i]}, but was {result}");
             i++;
         } 
     }
@@ -39,7 +39,7 @@ public class UniversalConverterTest
 
             converter.SetNewInput(input, testTargetUnits[i]);
             string result = converter.GetResult();
-            Assert.AreEqual(result, expectedResults[i], $"The result should have been {expectedResults[i]}, but was {result}");
+            Assert.That(expectedResults[i], Is.EqualTo(result), $"The result should have been {expectedResults[i]}, but was {result}");
             i++;
         }         
     }

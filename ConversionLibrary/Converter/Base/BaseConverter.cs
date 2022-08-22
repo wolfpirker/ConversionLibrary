@@ -46,7 +46,7 @@ namespace ConversionLibrary.Converter.Base
             return result;
         }     
 
-        protected string GetOutputStringFromResults(StringParserResult pResult, double result){
+        protected static string GetOutputStringFromResults(StringParserResult pResult, double result){
             FormattableString formattable = $"{result:n} {pResult.ToUnit.SiPrefix}{pResult.ToUnit.UnitName}";
             return formattable.ToString(CultureInfo.InvariantCulture);
         }

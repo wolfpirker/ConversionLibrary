@@ -39,8 +39,10 @@ namespace ConversionLibrary.Converter.Base
             }
 
             tmp = ParseUnitInfo(trimmedInput);
-            from = new FromUnit(tmp);
-            from.Value = value;
+            from = new FromUnit(tmp)
+            {
+                Value = value
+            };
             to   = ParseUnitInfo(trimmedTarget);
 
             if (CheckUnitsCompatible(inputUnit, trimmedTarget, from, to)){
