@@ -20,6 +20,19 @@ namespace ConversionLibrary.Converter.Base
             this._category = category;       
         }  
 
+        // method to check whether given unit+si-prefix is fully supported
+        // e.g. Kibibyte, Kelvin should throw ConversionNotSupportedException
+        private static bool CheckUnitCompatible(string inputUnit, string targetUnit, FromUnit from, ToUnit to){
+            if (inputUnit.Length > from.UnitName.Length + from.SiPrefix.Length){
+                throw new ConversionNotSupportedException();
+            }
+            if (targetUnit.Length > to.UnitName.Length + to.SiPrefix.Length){
+                throw new ConversionNotSupportedException();
+            }
+            return true;
+        }
+
+
         // method to parse string as FromUnit and ToUnit object;
         // returns StringParserResult with extracted information 
         public StringParserResult GetParserResults(){
@@ -27,14 +40,16 @@ namespace ConversionLibrary.Converter.Base
             string? unitFrom = null, unitTo = null;
             FromUnit from;
             ToUnit to;
-            string siPrefixTo = "";
+            string siPrefixTo = "", siPrefixFrom="";
             Int16 base10From = 0, base10To = 0;
             double value;
             
+            string inputUnit;
             string trimmedInput = _input.Trim().ToLower();
             string trimmedTarget = _targetUnit.Trim().ToLower();
-            if (trimmedInput.Contains(" ")){
+            if (trimmedInput.Contains(' ')){
                 value = double.Parse(trimmedInput.Split(" ")[0], CultureInfo.InvariantCulture);
+                inputUnit = trimmedInput.Split(" ")[1];
             }
             else{
                 throw new InvalidInputFormatException("inner space between value and unit is missing!");
@@ -42,7 +57,8 @@ namespace ConversionLibrary.Converter.Base
             
             try{
                 siMatch =siPrefixBases.Keys.SingleOrDefault(prefix => trimmedInput.Contains($" {prefix}"));
-                if (siMatch != null){                    
+                if (siMatch != null){   
+                    siPrefixFrom = siMatch;                 
                     base10From = siPrefixBases[siMatch];
                 }
 
@@ -69,13 +85,19 @@ namespace ConversionLibrary.Converter.Base
             }     
 
             if (!String.IsNullOrEmpty(unitFrom) && !String.IsNullOrEmpty(unitTo)){
-                from = new FromUnit(unitFrom, base10From, value );  
+                from = new FromUnit(unitFrom, base10From, siPrefixFrom, value );  
                 to = new ToUnit(unitTo, base10To, siPrefixTo );
             }  
             else{
                 throw new InvalidInputFormatException();
             } 
-            return new StringParserResult(from, to);
+
+            if (CheckUnitCompatible(inputUnit, trimmedTarget, from, to)){
+                return new StringParserResult(from, to);
+            }
+            else{
+                throw new ConversionNotSupportedException();
+            }
         }      
     }
 }

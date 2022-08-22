@@ -39,7 +39,7 @@ namespace ConversionLibrary.Converter
         public override IEnumerable<string> SupportedUnits => _supportedUnits;
 
         public override string GetResult(){
-            double result = 0d;
+
 
             ConverterCategory = getConverterCategoryMatch();
 
@@ -56,19 +56,20 @@ namespace ConversionLibrary.Converter
         }        
 
         private string useConverter<T>(T converter) where T : BaseConverter{
-            converter.GetNewInput(InputValue, TargetUnit);
+            converter.SetNewInput(InputValue, TargetUnit);
             return converter.GetResult();
         }
 
         // find a match of the units with a converter category of supported units
         private CategoryEnum getConverterCategoryMatch(){
-            if (lengthConverter.SupportedUnits.Any(unit => InputValue.EndsWith(unit))){
+            string trimmedInput = InputValue.Trim().ToLower();
+            if (lengthConverter.SupportedUnits.Any(unit => trimmedInput.EndsWith(unit))){
                 return CategoryEnum.Length;
             }
-            else if (dataConverter.SupportedUnits.Any(unit => InputValue.EndsWith(unit))){
+            else if (dataConverter.SupportedUnits.Any(unit => trimmedInput.EndsWith(unit))){
                 return CategoryEnum.Data;
             }
-            else if (temperatureConverter.SupportedUnits.Any(unit => InputValue.EndsWith(unit))){
+            else if (temperatureConverter.SupportedUnits.Any(unit => trimmedInput.EndsWith(unit))){
                 return CategoryEnum.Temperature;
             }
             return CategoryEnum.Invalid;

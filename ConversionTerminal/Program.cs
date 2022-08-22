@@ -11,7 +11,7 @@ string getResultOfConversion<T>(T converter) where T : BaseConverter
     inputValue = Console.ReadLine();
     System.Console.WriteLine("Enter target unit:");
     unitTarget = Console.ReadLine();
-    converter.GetNewInput(inputValue, unitTarget);
+    converter.SetNewInput(inputValue, unitTarget);
     return converter.GetResult();
 }
 

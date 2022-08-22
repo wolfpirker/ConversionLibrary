@@ -10,8 +10,8 @@ namespace ConversionLibrary.Converter.Base
 
     public abstract class BaseConverter
     {
-        private string _inputValue;
-        private string _targetUnit;  
+        private string? _inputValue;
+        private string? _targetUnit;  
 
         protected BaseConverter() 
         {
@@ -30,7 +30,7 @@ namespace ConversionLibrary.Converter.Base
         protected string InputValue => _inputValue;
         protected string TargetUnit => _targetUnit;
 
-        public void GetNewInput(string inputValue, string targetUnit){
+        public void SetNewInput(string inputValue, string targetUnit){
             this._inputValue = inputValue;
             this._targetUnit = targetUnit;
         }
