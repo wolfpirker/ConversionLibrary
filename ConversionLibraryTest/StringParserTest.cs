@@ -59,8 +59,7 @@ public class StringParserTest
             if (categoryDict.ContainsKey(i)){
                 cat = categoryDict[i];
             }
-            var parser = new StringParser(input, testTargetUnits[i], cat);   
-            System.Console.WriteLine($"{i}: {input}, {testTargetUnits[i]}");         
+            var parser = new StringParser(input, testTargetUnits[i], cat);          
             StringParserResult result = parser.GetParserResults();   
             Assert.Multiple(() =>
             {
