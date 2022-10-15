@@ -1,0 +1,18 @@
+I developed this conversion library as home assigment in a hiring process for some company. 
+Since then I learned some more about C# patterns, design principles, 
+dependency injection and some principles of unit tests.
+
+So now I want to improve or look into the following:
+* see how the code looks like if I use composition instead of inheritance
+* make it easier to extend an converter - issue currently: for extension StringParseSpecification 
+needs code changes in the unitMatches Dictionary
+* however I don't want to overengineer; 
+I will see if I use dependency injection or Decorator design pattern, where it could make sense
+
+about the Unit Tests:
+* I want to make sure that:
+  > all Unit Test case only tests one piece of functionality if possible
+  > all Unit Tests don't interfere with each other
+  > see if use of mocking makes sense in my tests
+
+  all this primarily for practice and training purpose.
