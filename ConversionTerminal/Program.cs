@@ -1,9 +1,10 @@
 ﻿using ConversionLibrary;
 using ConversionLibrary.Converter.Base;
+using ConversionLibrary.Converter.Contract;
 
 // See https://aka.ms/new-console-template for more information; about .NET6 changes
 
-static string getResultOfConversion<T>(T converter) where T : BaseConverter
+static string getResultOfConversion<T>(T converter) where T : IConverter
 {
     string? inputValue, unitTarget;
     System.Console.WriteLine($"supported units: {string.Join(", ", converter.SupportedUnits)} (in combination with SI-Prefixes)");
@@ -11,8 +12,7 @@ static string getResultOfConversion<T>(T converter) where T : BaseConverter
     inputValue = Console.ReadLine();
     System.Console.WriteLine("Enter target unit:");
     unitTarget = Console.ReadLine();
-    converter.SetNewInput(inputValue, unitTarget);
-    return converter.GetResult();
+    return converter.GetResult(inputValue, unitTarget);
 }
 
 System.Console.WriteLine(@"Program to convert between different units of length, data and temperature.
@@ -22,7 +22,6 @@ syntax rules:
   *) as target unit also write the full SI-prefix and full unitname.
 
 to start enter first a single number for the type of conversion:
-  0) universal converion - decides which converter to use itself
   1) length conversion
   2) data conversion
   3) temperature conversion  
@@ -31,15 +30,11 @@ to start enter first a single number for the type of conversion:
 while (true){
 
     string mode = Console.ReadLine();
-    var universalConverter = new ConversionLibrary.Converter.UniversalConverter();
-    var lengthConverter = new ConversionLibrary.Converter.LengthConverter();
-    var dataConverter = new ConversionLibrary.Converter.DataConverter();
-    var temperatureConverter = new ConversionLibrary.Converter.TemperatureConverter();
+    StringParser parser = new StringParser();
+    var lengthConverter = new ConversionLibrary.Converter.LengthConverter(parser);
+    var dataConverter = new ConversionLibrary.Converter.DataConverter(parser);
+    var temperatureConverter = new ConversionLibrary.Converter.TemperatureConverter(parser);
     switch(mode){
-        case "0":
-            System.Console.WriteLine($"Type of Conversion: Universal conversion");
-            System.Console.WriteLine($"{getResultOfConversion(universalConverter)}");
-            break;
         case "1":
             System.Console.WriteLine($"Type of Conversion: Length conversion");
             System.Console.WriteLine($"{getResultOfConversion(lengthConverter)}");

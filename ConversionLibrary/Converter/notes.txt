@@ -7,7 +7,7 @@ So now I want to improve or look into the following:
 * make it easier to extend an converter - issue currently: for extension StringParseSpecification 
 needs code changes in the unitMatches Dictionary
 * however I don't want to overengineer; 
-I will see if I use dependency injection or Decorator design pattern, where it could make sense
+I will see if I use dependency injection, Decorator or Strategy design pattern, where it could make sense
 
 about the Unit Tests:
 * I want to make sure that:

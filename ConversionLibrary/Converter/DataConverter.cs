@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ConversionLibrary.Converter.Base;
+using ConversionLibrary.Converter.Contract;
 
 namespace ConversionLibrary.Converter
 {
-    public class DataConverter : BaseConverter
+    public class DataConverter : IConverter
     {
+        private StringParser _parser;
         private const CategoryEnum ConverterCategory = CategoryEnum.Data;
 
         private static readonly IReadOnlyDictionary<string, double> unitFactors = new Dictionary<string, double>{            
@@ -17,27 +19,29 @@ namespace ConversionLibrary.Converter
 
         private readonly IEnumerable<string> _supportedUnits = unitFactors.Keys;
 
-        public DataConverter()
-        {            
+        // avoid that class instance is created without parser
+        private DataConverter(){
+
         }
 
-        public DataConverter(string inputValue, string targetUnit) : base(inputValue, targetUnit)
+        public DataConverter(StringParser parser)
         {
-
+            _parser = parser ?? throw new ArgumentNullException();
         }
 
-        public override IEnumerable<string> SupportedUnits => _supportedUnits;
+        public IEnumerable<string> SupportedUnits => _supportedUnits;
 
-        public override string GetResult(){
+        public string GetResult(string source, string targetUnit){
             double result;
-            StringParserResult pResult = this.Parse(ConverterCategory);
+
+            StringParserResult pResult = this._parser.GetParserResults(source, targetUnit, ConverterCategory);
 
             result = pResult.FromUnit.Value;
             result *= Math.Pow(10,pResult.FromUnit.Base10-pResult.ToUnit.Base10);
             result /= unitFactors[pResult.FromUnit.UnitName];
             result *= unitFactors[pResult.ToUnit.UnitName];
 
-            return GetOutputStringFromResults(pResult, result);
+            return ResultPrinter.GetOutputStringFromResults(pResult, result);
         }
     }
 }

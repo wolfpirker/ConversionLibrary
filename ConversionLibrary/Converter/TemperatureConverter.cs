@@ -5,25 +5,29 @@ using System.Threading.Tasks;
 using ConversionLibrary.Converter.Base;
 using ConversionLibrary.Converter.Exceptions;
 using System.Globalization;
+using ConversionLibrary.Converter.Contract;
 
 namespace ConversionLibrary.Converter
 {
-    public class TemperatureConverter : BaseConverter
+    public class TemperatureConverter : IConverter
     {
+        private StringParser _parser;
         private const CategoryEnum ConverterCategory = CategoryEnum.Temperature;
         private readonly IEnumerable<string> _supportedUnits = new List<string>() {"celsius", "fahrenheit"};
-        public TemperatureConverter()
+
+        private TemperatureConverter()
         {            
         }
-        public TemperatureConverter(string inputValue, string targetUnit) : base(inputValue, targetUnit)
+        public TemperatureConverter(StringParser parser)
         {
+            _parser = parser ?? throw new ArgumentNullException();
         }
 
-        public override IEnumerable<string> SupportedUnits => _supportedUnits;
+        public IEnumerable<string> SupportedUnits => _supportedUnits;
 
-        public override string GetResult(){
+        public string GetResult(string source, string targetUnit){
             double result = 0d;
-            StringParserResult pResult = this.Parse(ConverterCategory);
+            StringParserResult pResult = this._parser.GetParserResults(source, targetUnit, ConverterCategory);
 
             switch(pResult.FromUnit.UnitName){
                 case "celsius":
@@ -53,7 +57,7 @@ namespace ConversionLibrary.Converter
                 result *= Math.Pow(10, -pResult.ToUnit.Base10);
             }
 
-            return GetOutputStringFromResults(pResult, result);
+            return ResultPrinter.GetOutputStringFromResults(pResult, result);
         }
         
     }
