@@ -12,55 +12,33 @@ public class StringParserTest
 {
     [Test]
     public void GetParserResults()
-    {
-        CategoryEnum cat = 0;
-        
-        List<string> testInputs = LengthConverterTest.TestInputs.Concat(DataConverterTest.TestInputs.Concat(TemperatureConverterTest.TestInputs)).ToList<string>();
-        List<string> testTargetUnits = LengthConverterTest.TestTargetUnits.Concat(DataConverterTest.TestTargetUnits.Concat(TemperatureConverterTest.TestTargetUnits)).ToList<string>();
+    {        
+        List<string> testInputs = DataConverterTest.TestInputs;
+        List<string> testTargetUnits = DataConverterTest.TestTargetUnits;
         List<string> siPrefixInput = new()
         {
-            // {"15505.5 decimeter", "15.52 Hectoinch", "15.214 Miles", "15250 decifoot"}
-            "deci", "hecto", "", "deci",
-            // "15505.5 kilobyte", "15525 megabyte", "15.214 terabyte", "32 bit"
-            "kilo", "mega", "tera", "",
-            // "15.5 Celsius", "132.4 fahrenheit", "12.5 centicelsius"
-            "", "", "centi"
+            "kilo", "mega", "tera", ""
         };
         List<string> siPrefixTarget = new()
         {
-            // {"kilometer", "miles", "centimeter", "Mile"}
-            "kilo", "", "centi", "",
-            // {"bit", "gigabyte", "megabyte", "byte"}
-            "", "giga", "mega", "",
-            // "Fahrenheit", "celsius", "millifahrenheit"
-            "", "", "milli"
+            "", "giga", "mega", ""
         };
         List<string> siUnitInput = new()
         {
-            "meter", "inch", "miles", "foot",
-            "byte", "byte", "byte", "bit",
-            "celsius", "fahrenheit", "celsius"
+            "byte", "byte", "byte", "bit"
         };
         List<string> siUnitTarget = new()
         {
-            "meter", "miles", "meter", "mile",
-            "bit", "byte", "byte", "byte",
-            "fahrenheit", "celsius", "fahrenheit"
+            "bit", "byte", "byte", "byte"
         };
 
-        Dictionary<int, CategoryEnum> categoryDict = new()
-        {
-            {0, CategoryEnum.Length },
-            {4, CategoryEnum.Data },
-            {8, CategoryEnum.Temperature }
-        };
+        CategoryEnum category = CategoryEnum.Data;
+
         int i = 0;
-        foreach (string input in testInputs){
-            if (categoryDict.ContainsKey(i)){
-                cat = categoryDict[i];
-            }
-            var parser = new StringParser(input, testTargetUnits[i], cat);          
-            StringParserResult result = parser.GetParserResults();   
+        foreach (string input in testInputs){        
+
+            var parser = new StringParser(new List<string> (){"byte", "bit"});          
+            StringParserResult result = parser.GetParserResults(input, testTargetUnits[i], category);   
             Assert.Multiple(() =>
             {
                 Assert.That(siPrefixInput[i], Is.EqualTo(result.FromUnit.SiPrefix), $"The result should have been {siPrefixInput[i]}, but was {result.FromUnit.SiPrefix}");
@@ -76,15 +54,16 @@ public class StringParserTest
     [Test]
     public void RaiseConversionNotSupportedException()
     {
-        var parser = new StringParser("125 kibibyte", "byte", CategoryEnum.Data);            
-         Assert.Throws<ConversionNotSupportedException>(() => parser.GetParserResults());  
-        
+        var sampleUnits = new List<string>(){"byte", "bit"};
+        var parser = new StringParser(sampleUnits);
+         Assert.Throws<ConversionNotSupportedException>(() => parser.GetParserResults("125 kibibyte", "byte", CategoryEnum.Data));          
     }
 
     [Test]
     public void RaiseInvalidInputFormatException()
     {
-        var parser = new StringParser("125 kilobyte millibit", "byte", CategoryEnum.Data);            
-         Assert.Throws<InvalidInputFormatException>(() => parser.GetParserResults());          
+        var sampleUnits = new List<string>(){"byte", "bit"};
+        var parser = new StringParser(sampleUnits);            
+         Assert.Throws<InvalidInputFormatException>(() => parser.GetParserResults("125 kilobyte millibit", "byte", CategoryEnum.Data));          
     }
 }

@@ -51,5 +51,5 @@ while (true){
         default:
             return;
     }
-    System.Console.WriteLine("Enter number for type of conversion (0, 1, 2 or 3) or q to quit:");
+    System.Console.WriteLine("Enter number for type of conversion (1, 2 or 3) or q to quit:");
 }

@@ -11,7 +11,7 @@ namespace ConversionLibrary.Converter
 {
     public class TemperatureConverter : IConverter
     {
-        private StringParser _parser;
+        private readonly StringParser _parser;
         private const CategoryEnum ConverterCategory = CategoryEnum.Temperature;
         private static readonly IEnumerable<string> _supportedUnits = new List<string>() {"celsius", "fahrenheit"};
 

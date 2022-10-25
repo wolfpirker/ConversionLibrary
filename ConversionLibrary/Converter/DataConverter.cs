@@ -9,7 +9,7 @@ namespace ConversionLibrary.Converter
 {
     public class DataConverter : IConverter
     {
-        private StringParser _parser;
+        private readonly StringParser _parser;
         private const CategoryEnum ConverterCategory = CategoryEnum.Data;
 
         private static readonly IReadOnlyDictionary<string, double> unitFactors = new Dictionary<string, double>{            

@@ -9,7 +9,7 @@ namespace ConversionLibrary.Converter
 {
     public class LengthConverter : IConverter
     {
-        private StringParser _parser;
+        private readonly StringParser _parser;
         private const CategoryEnum ConverterCategory = CategoryEnum.Length;
 
         // factors in direction from input unit to output unit; reverse like divisor

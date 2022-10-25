@@ -1,6 +1,8 @@
 namespace ConversionLibraryTest.Converter;
 using System.Collections.Generic;
 using ConversionLibrary.Converter;
+using ConversionLibrary.Converter.Base;
+using Moq;
 using NUnit.Framework;
 
 public class DataConverterTest
@@ -16,27 +18,17 @@ public class DataConverterTest
     public static List<string> ExpectedResults => expectedResults;
 
     [Test]
-    public void GetResultByNewInstance()
+    public void GetResult()
     {
         int i = 0;
+        // Arrange
+        var mock = new Mock<StringParser>(new List<string>(){"byte", "bit"});
+        //mock.Setup(p => p.GetParserResults((It.IsAny<string>(),It.IsAny<string>(), CategoryEnum.Data )).Returns(StringParserResult);
+
+        var converter = new DataConverter(mock.Object);
         foreach (var input in testInputs){
 
-            var converter = new DataConverter(input, testTargetUnits[i]);
-            string result = converter.GetResult();
-            Assert.That(expectedResults[i], Is.EqualTo(result), $"The result should have been {expectedResults[i]}, but was {result}");
-            i++;
-        } 
-    }
-
-    [Test]
-    public void GetResultNoNewInstances()
-    {
-        int i = 0;
-        var converter = new DataConverter();
-        foreach (var input in testInputs){
-
-            converter.SetNewInput(input, testTargetUnits[i]);
-            string result = converter.GetResult();
+            string result = converter.GetResult(input, testTargetUnits[i]);
             Assert.That(expectedResults[i], Is.EqualTo(result), $"The result should have been {expectedResults[i]}, but was {result}");
             i++;
         } 
