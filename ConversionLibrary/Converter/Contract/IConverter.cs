@@ -8,7 +8,7 @@ namespace ConversionLibrary.Converter.Contract
 {
     public interface IConverter
     {
-        public IEnumerable<string> SupportedUnits
+        public static IEnumerable<string> SupportedUnits
         {
             get;
         }

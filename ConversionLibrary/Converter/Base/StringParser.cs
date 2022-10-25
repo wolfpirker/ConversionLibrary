@@ -7,10 +7,33 @@ using ConversionLibrary.Converter.Exceptions;
 
 namespace ConversionLibrary.Converter.Base
 {
-    public class StringParser : StringParserSpecification
-    {        
-        // method to parse string as FromUnit and ToUnit object;
-        // returns StringParserResult with extracted information 
+    public class StringParser
+    {       
+        IEnumerable<string> _supportedUnits; 
+            
+        protected IReadOnlyDictionary<string, Int16> siPrefixBases = new Dictionary<string, Int16>{
+                {"nano", -9},
+                {"micro", -6},
+                {"milli", -3}, 
+                {"centi", -2},
+                {"deci", -1},
+                {"deka", 1},
+                {"hecto", 2},
+                {"kilo", 3},
+                {"mega", 6},
+                {"giga", 9},
+                {"tera", 12}
+            };
+
+        private StringParser(){
+
+        }
+
+        public StringParser(IEnumerable<string> supportedUnits){
+            if (supportedUnits.Any()) _supportedUnits = supportedUnits;
+            else throw new SupportedUnitsNotSpecifiedException();             
+        }
+
         public StringParserResult GetParserResults(string src, string targetUnit, CategoryEnum category){
             FromUnit from;
             ToUnit to, tmp;
@@ -60,7 +83,7 @@ namespace ConversionLibrary.Converter.Base
             } 
 
             try{
-                unit = unitMatches[category].SingleOrDefault(unit => trimmedInput.EndsWith(unit));
+                unit = _supportedUnits.SingleOrDefault(unit => trimmedInput.EndsWith(unit));
             }
             catch(System.InvalidOperationException){
                 throw new InvalidInputFormatException("Several unit matches in input value instead of one!");
@@ -82,6 +105,11 @@ namespace ConversionLibrary.Converter.Base
                 throw new ConversionNotSupportedException();
             }
             return true;
+        }
+
+        protected static string GetOutputStringFromResults(StringParserResult pResult, double result){
+            FormattableString formattable = $"{result:n} {pResult.ToUnit.SiPrefix}{pResult.ToUnit.UnitName}";
+            return formattable.ToString(CultureInfo.InvariantCulture);
         }
 
     }

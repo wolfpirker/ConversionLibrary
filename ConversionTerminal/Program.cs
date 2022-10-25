@@ -1,13 +1,14 @@
 ﻿using ConversionLibrary;
+using ConversionLibrary.Converter;
 using ConversionLibrary.Converter.Base;
 using ConversionLibrary.Converter.Contract;
 
 // See https://aka.ms/new-console-template for more information; about .NET6 changes
 
-static string getResultOfConversion<T>(T converter) where T : IConverter
+static string getResultOfConversion<T>(T converter, IEnumerable<string> units) where T : IConverter
 {
     string? inputValue, unitTarget;
-    System.Console.WriteLine($"supported units: {string.Join(", ", converter.SupportedUnits)} (in combination with SI-Prefixes)");
+    System.Console.WriteLine("supported units: " + string.Join(", ", units) + " (in combination with SI-Prefixes)");
     System.Console.WriteLine("Enter input value with unit, e.g.: 1.25 <unit>, etc.:");
     inputValue = Console.ReadLine();
     System.Console.WriteLine("Enter target unit:");
@@ -30,23 +31,22 @@ to start enter first a single number for the type of conversion:
 while (true){
 
     string mode = Console.ReadLine();
-    StringParser parser = new StringParser();
-    var lengthConverter = new ConversionLibrary.Converter.LengthConverter(parser);
-    var dataConverter = new ConversionLibrary.Converter.DataConverter(parser);
-    var temperatureConverter = new ConversionLibrary.Converter.TemperatureConverter(parser);
+    var lengthConverter = new LengthConverter(new StringParser(LengthConverter.SupportedUnits));
+    var dataConverter = new DataConverter(new StringParser(DataConverter.SupportedUnits));
+    var temperatureConverter = new TemperatureConverter(new StringParser(TemperatureConverter.SupportedUnits));
     switch(mode){
         case "1":
             System.Console.WriteLine($"Type of Conversion: Length conversion");
-            System.Console.WriteLine($"{getResultOfConversion(lengthConverter)}");
+            System.Console.WriteLine($"{getResultOfConversion(lengthConverter, LengthConverter.SupportedUnits)}");
             break;
         case "2":
             System.Console.WriteLine($"Type of Conversion: Data conversion");
             System.Console.WriteLine("Note: binary prefixes are not supported: kibi, mebi, gibi, tebi.");
-            System.Console.WriteLine($"{getResultOfConversion(dataConverter)}");
+            System.Console.WriteLine($"{getResultOfConversion(dataConverter, DataConverter.SupportedUnits)}");
             break;
         case "3":
             System.Console.WriteLine($"Type of Conversion: Temperature conversion");
-            System.Console.WriteLine($"{getResultOfConversion(temperatureConverter)}");
+            System.Console.WriteLine($"{getResultOfConversion(temperatureConverter, TemperatureConverter.SupportedUnits)}");
             break;
         default:
             return;

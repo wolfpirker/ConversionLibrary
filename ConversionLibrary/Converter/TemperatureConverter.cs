@@ -13,17 +13,17 @@ namespace ConversionLibrary.Converter
     {
         private StringParser _parser;
         private const CategoryEnum ConverterCategory = CategoryEnum.Temperature;
-        private readonly IEnumerable<string> _supportedUnits = new List<string>() {"celsius", "fahrenheit"};
+        private static readonly IEnumerable<string> _supportedUnits = new List<string>() {"celsius", "fahrenheit"};
 
         private TemperatureConverter()
         {            
         }
         public TemperatureConverter(StringParser parser)
         {
-            _parser = parser ?? throw new ArgumentNullException();
+            _parser = parser ?? throw new ArgumentNullException("parser required");
         }
 
-        public IEnumerable<string> SupportedUnits => _supportedUnits;
+        public static IEnumerable<string> SupportedUnits => _supportedUnits;
 
         public string GetResult(string source, string targetUnit){
             double result = 0d;

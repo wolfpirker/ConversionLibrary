@@ -17,7 +17,7 @@ namespace ConversionLibrary.Converter
             {"byte", 1d}
         };
 
-        private readonly IEnumerable<string> _supportedUnits = unitFactors.Keys;
+        private static readonly IEnumerable<string> _supportedUnits = unitFactors.Keys;
 
         // avoid that class instance is created without parser
         private DataConverter(){
@@ -26,10 +26,10 @@ namespace ConversionLibrary.Converter
 
         public DataConverter(StringParser parser)
         {
-            _parser = parser ?? throw new ArgumentNullException();
+            _parser = parser ?? throw new ArgumentNullException("parser required");
         }
 
-        public IEnumerable<string> SupportedUnits => _supportedUnits;
+        public static IEnumerable<string> SupportedUnits => _supportedUnits;
 
         public string GetResult(string source, string targetUnit){
             double result;

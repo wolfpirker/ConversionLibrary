@@ -22,7 +22,7 @@ namespace ConversionLibrary.Converter
             {"mile", 1d/1609d},
             {"miles", 1d/1609d}
         };
-        private readonly IEnumerable<string> _supportedUnits = unitFactors.Keys;
+        private static readonly IEnumerable<string> _supportedUnits = unitFactors.Keys;
 
         // avoid that class instance is created without parser
         private LengthConverter(){
@@ -35,7 +35,7 @@ namespace ConversionLibrary.Converter
         }
 
 
-        public IEnumerable<string> SupportedUnits => _supportedUnits;
+        public static IEnumerable<string> SupportedUnits => _supportedUnits;
 
         public string GetResult(string source, string targetUnit){
             double result;
